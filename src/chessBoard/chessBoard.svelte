@@ -1,9 +1,9 @@
 <script lang="ts">
   import Square from './square/square.svelte'
-  import { createChessBoard } from '../utilities/createBoard'
-  import { addPiecesToBoard } from '../utilities/addPiecesToBoard'
-  const board = createChessBoard()
-  const boardWithPieces = addPiecesToBoard(board)
+  import { useMachine } from 'xstate-svelte'
+  import { machine } from '../utilities/machine'
+
+  const { state, send } = useMachine(machine, { devTools: true })
 </script>
 
 <style>
@@ -19,7 +19,11 @@
 </style>
 
 <div class="chess-board">
-  {#each boardWithPieces as square}
-    <Square color={square.color} location={square.location} />
-  {/each}
+  {#if $state.matches('setup')}
+    <span>Setting up the board...</span>
+  {:else if $state.matches('play')}
+    {#each $state.context.board as square}
+      <Square color={square.color} location={square.location} />
+    {/each}
+  {/if}
 </div>

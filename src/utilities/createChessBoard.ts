@@ -35,7 +35,13 @@ const createChessBoard = () => {
     board.push(square)
   }
 
-  return board
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(board)
+    }, 1000)
+  })
+
+  // return board
 }
 
 export { createChessBoard }

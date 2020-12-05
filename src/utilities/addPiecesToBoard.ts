@@ -1,4 +1,4 @@
-import type { Board } from './createBoard'
+import type { Board } from './createChessBoard'
 
 const addPiecesToBoard = (board: Board) => {
   return board

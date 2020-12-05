@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Color } from '../../utilities/createBoard'
-  import type { Location } from '../../utilities/createBoard'
+  import type { Color } from '../../utilities/createChessBoard'
+  import type { Location } from '../../utilities/createChessBoard'
   export let color: Color
   export let location: Location
 </script>
@@ -20,4 +20,4 @@
   }
 </style>
 
-<div class={color}><span class="location">{location}</span></div>
+<div class={color}><span class="location"> {location} </span></div>
