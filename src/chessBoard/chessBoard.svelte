@@ -1,9 +1,22 @@
 <script lang="ts">
   import Square from './square/square.svelte'
   import { useMachine } from 'xstate-svelte'
-  import { machine } from '../utilities/machine'
+  import { machine } from '../state/machine'
+  import { getAvailableMoves } from '../utilities/getAvailableMoves'
 
   const { state, send } = useMachine(machine, { devTools: true })
+
+  // Handle square click
+  const handleClick = (sqaure: Chess.Square) => {
+    const availableMoves = getAvailableMoves(sqaure, $state.context.player)
+
+    if (availableMoves.length > 0) {
+      send('MOVE')
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('availableMoves:', availableMoves)
+  }
 </script>
 
 <style>
@@ -24,6 +37,7 @@
   {:else if $state.matches('play')}
     {#each $state.context.board as square}
       <Square
+        onClickCallback={handleClick}
         color={square.color}
         location={square.location}
         piece={square.piece} />

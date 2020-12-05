@@ -1,5 +1,5 @@
 import {assign, Machine} from 'xstate'
-import { setupNewGame } from './setupNewGame'
+import { setupNewGame } from '../utilities/setupNewGame'
 
 // Schema for all possible states
 interface ChessStateSchema {
@@ -15,10 +15,12 @@ type ChessEvent =
   | { type: 'CHECKMATE' }
   | { type: 'RESET' }
   | { type: 'PLAY_AGAIN' }
+  | { type: 'MOVE' }
 
 // The context (extended state) of the machine
 interface ChessContext {
-  board: [] | Board
+  board: [] | Chess.Board
+  player: Chess.Color
 }
 
 const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
@@ -27,6 +29,7 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
     initial: 'setup',
     context: {
       board: [],
+      player: 'white',
     },
     states: {
       setup: {
@@ -44,7 +47,11 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
       play: {
         on: {
           CHECKMATE: 'gameOver',
-          RESET: 'setup'
+          RESET: 'setup',
+          MOVE: {
+            target: 'play',
+            actions: 'swapPlayer',
+          }
         },
       },
       gameOver: {
@@ -55,6 +62,12 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
     },
   },
   {
+    actions: {
+      swapPlayer: assign(ctx => ({
+        ...ctx,
+        player: ctx.player === 'white' ? 'black' : 'white'
+      })),
+    },
     services: {
       createChessBoard: () => new Promise(resolve => resolve(setupNewGame())),
     },

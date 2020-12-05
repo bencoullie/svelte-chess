@@ -1,10 +1,15 @@
 <script lang="ts">
   import { getBackgroundImage } from '../../utilities/getBackgroundImage'
-  export let color: Color
-  export let location: SquareLocation
-  export let piece: Piece | undefined
+
+  export let color: Chess.Color
+  export let location: Chess.Location
+  export let piece: Chess.Piece | undefined
+  export let onClickCallback: (square: Chess.Square) => void
 
   const backgroundImage = piece ? getBackgroundImage(piece) : undefined
+  const handleCLick = () => {
+    onClickCallback({ color, location, piece })
+  }
 </script>
 
 <style>
@@ -34,6 +39,7 @@
 </style>
 
 <div
+  on:click={handleCLick}
   class={`square ${color}`}
   style={backgroundImage && `background-image: url(${backgroundImage})`}>
   <div class="location">{location}</div>
