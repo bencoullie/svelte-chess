@@ -1,5 +1,5 @@
 import {assign, Machine} from 'xstate'
-import {Board, createChessBoard} from './createChessBoard'
+import { setupNewGame } from './setupNewGame'
 
 // Schema for all possible states
 interface ChessStateSchema {
@@ -56,7 +56,7 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
   },
   {
     services: {
-      createChessBoard: () => new Promise(resolve => resolve(createChessBoard())),
+      createChessBoard: () => new Promise(resolve => resolve(setupNewGame())),
     },
   },
 )

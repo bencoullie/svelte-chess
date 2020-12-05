@@ -23,7 +23,10 @@
     <span>Setting up the board...</span>
   {:else if $state.matches('play')}
     {#each $state.context.board as square}
-      <Square color={square.color} location={square.location} />
+      <Square
+        color={square.color}
+        location={square.location}
+        piece={square.piece} />
     {/each}
   {/if}
 </div>

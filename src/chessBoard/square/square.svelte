@@ -1,8 +1,7 @@
 <script lang="ts">
-  import type { Color } from '../../utilities/createChessBoard'
-  import type { Location } from '../../utilities/createChessBoard'
   export let color: Color
-  export let location: Location
+  export let location: SquareLocation
+  export let piece: Piece | undefined
 </script>
 
 <style>
@@ -15,9 +14,19 @@
   }
 
   .location {
-    position: relative;
+    position: absolute;
     top: 75px;
+    width: 100%;
+  }
+
+  .square {
+    position: relative;
+    width: 100px;
+    height: 100px;
   }
 </style>
 
-<div class={color}><span class="location"> {location} </span></div>
+<div class={`square ${color}`}>
+  {#if piece}<span> {piece.type} </span>{/if}
+  <div class="location">{location}</div>
+</div>
