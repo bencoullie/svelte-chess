@@ -18,7 +18,6 @@ declare global {
       color: Color
       location: Location
       piece?: Piece
-      isHighlighted: boolean
       availableMoves: Square[]
     }
     
