@@ -1,4 +1,4 @@
-const getBackgroundImage = (piece: Piece) => {
+const getBackgroundImage = (piece: Chess.Piece) => {
   return `/images/${piece.color}-${piece.type}.svg`
 }
 

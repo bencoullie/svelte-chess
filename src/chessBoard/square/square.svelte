@@ -1,15 +1,37 @@
 <script lang="ts">
   import { getBackgroundImage } from '../../utilities/getBackgroundImage'
 
-  export let color: Chess.Color
-  export let location: Chess.Location
-  export let piece: Chess.Piece | undefined
+  export let square: Chess.Square
   export let onClickCallback: (square: Chess.Square) => void
 
-  const backgroundImage = piece ? getBackgroundImage(piece) : undefined
   const handleCLick = () => {
-    onClickCallback({ color, location, piece })
+    handleHoverOff()
+    onClickCallback(square)
   }
+
+  const handleHoverOn = () => {
+    square.availableMoves.forEach((move) => {
+      const squareNode = document.querySelector(
+        `[data-location="${move.location}"]`
+      )
+
+      squareNode.classList.add('highlighted')
+    })
+  }
+
+  const handleHoverOff = () => {
+    square.availableMoves.forEach((move) => {
+      const squareNode = document.querySelector(
+        `[data-location="${move.location}"]`
+      )
+
+      squareNode.classList.remove('highlighted')
+    })
+  }
+
+  const backgroundImage = square.piece
+    ? getBackgroundImage(square.piece)
+    : undefined
 </script>
 
 <style>
@@ -24,23 +46,30 @@
   .location {
     position: absolute;
     top: 3px;
-    left: -34px;
-    width: 100%;
+    left: 7px;
     color: #555;
   }
 
   .square {
+    box-sizing: border-box;
     position: relative;
     width: 100px;
     height: 100px;
     background-position: center;
     background-size: contain;
   }
+
+  .highlighted {
+    opacity: 0.7;
+  }
 </style>
 
 <div
   on:click={handleCLick}
-  class={`square ${color}`}
+  on:mouseenter={handleHoverOn}
+  on:mouseleave={handleHoverOff}
+  data-location={square.location}
+  class={`square ${square.color}`}
   style={backgroundImage && `background-image: url(${backgroundImage})`}>
-  <div class="location">{location}</div>
+  <div class="location">{square.location}</div>
 </div>

@@ -1,4 +1,5 @@
-import {assign, Machine} from 'xstate'
+import { assign, Machine } from 'xstate'
+import { getAvailableMoves } from '../utilities/getAvailableMoves'
 import { setupNewGame } from '../utilities/setupNewGame'
 
 // Schema for all possible states
@@ -19,7 +20,7 @@ type ChessEvent =
 
 // The context (extended state) of the machine
 interface ChessContext {
-  board: [] | Chess.Board
+  board: Chess.Board
   player: Chess.Color
 }
 
@@ -50,8 +51,8 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
           RESET: 'setup',
           MOVE: {
             target: 'play',
-            actions: 'swapPlayer',
-          }
+            actions: ['swapPlayer', 'recalculateAvailableMoves'],
+          },
         },
       },
       gameOver: {
@@ -63,9 +64,13 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
   },
   {
     actions: {
-      swapPlayer: assign(ctx => ({
-        ...ctx,
-        player: ctx.player === 'white' ? 'black' : 'white'
+      swapPlayer: assign(context => ({
+        ...context,
+        player: context.player === 'white' ? 'black' : 'white'
+      })),
+      recalculateAvailableMoves: assign(context => ({
+        ...context,
+        board: getAvailableMoves(context.board, context.player)
       })),
     },
     services: {

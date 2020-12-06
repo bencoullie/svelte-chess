@@ -1,11 +1,11 @@
-const addPiecesToBoard = (board: Board): Board => {
+const addPiecesToBoard = (board: Chess.Board): Chess.Board => {
   const boardWithPieces = board.map(square => {
     // Pawns
     const isBlackPawnStartingLocation = square.location.includes('7')
     const isWhitePawnStartingLocation = square.location.includes('2')
 
     if (isBlackPawnStartingLocation || isWhitePawnStartingLocation) {
-      const piece: Piece = {
+      const piece: Chess.Piece = {
         type: 'pawn',
         color: isBlackPawnStartingLocation ? 'black' : 'white'
       }

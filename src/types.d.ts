@@ -9,8 +9,6 @@ declare global {
 
     declare type Location = typeof locations[number]
 
-    declare type Moves = Location[]
-
     declare interface Piece {
       color: Color
       type: PieceType
@@ -20,6 +18,8 @@ declare global {
       color: Color
       location: Location
       piece?: Piece
+      isHighlighted: boolean
+      availableMoves: Square[]
     }
     
     declare type Board = Square[]

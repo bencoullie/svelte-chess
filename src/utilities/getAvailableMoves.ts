@@ -1,48 +1,51 @@
-const getAvailableMoves = (square: Square, player: Color): Moves => {
-  const { piece, location } = square
+import cloneDeep from 'lodash.clonedeep'
 
-  // Can't do shit without a piece mate
-  if (!piece) {
-    return []
-  }
+const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, player: Chess.Color) => {
+  const { piece, location } = square
 
   // Can't move the other player's pieces... that would be too easy
   if (piece.color !== player) {
     return []
   }
 
+  const availableLocations = []
   const splitLocation = location.split('')
-  // const rank = splitLocation[0]
+  const isWhitePiece = piece.color === 'white'
   const file = Number(splitLocation[1])
+  // const rank = splitLocation[0]
 
   // Pawns
   if (piece.type === 'pawn') {
-    if (piece.color === 'white') {
-      const isStartingPosition = location.includes('2')
+    const isStartingPosition = isWhitePiece ? 
+      location.includes('2') : 
+      location.includes('7')
 
-      if (isStartingPosition) {
-        const singleStep = location.slice(0, -1) + (file + 1) as Location
-        const doubleStep = location.slice(0, -1) + (file + 2) as Location
-        return [singleStep, doubleStep]
-      } else {
-        const singleStep = location.slice(0, -1) + (file + 1) as Location
-        return [singleStep]
-      }
-    }
+    const singleRankChange = isWhitePiece ? file + 1 : file - 1
+    const singleStep = location.slice(0, -1) + singleRankChange
+    availableLocations.push(singleStep)
 
-    if (piece.color === 'black') {
-      const isStartingPosition = location.includes('7')
-
-      if (isStartingPosition) {
-        const singleStep = location.slice(0, -1) + (file - 1) as Location
-        const doubleStep = location.slice(0, -1) + (file - 2) as Location
-        return [singleStep, doubleStep]
-      } else {
-        const singleStep = location.slice(0, -1) + (file - 1) as Location
-        return [singleStep]
-      }
+    if (isStartingPosition) {
+      const doubleRankChange = isWhitePiece ? file + 2 : file - 2
+      const doubleStep = location.slice(0, -1) + doubleRankChange
+      availableLocations.push(doubleStep)
     }
   }
+
+  return cloneDeep(board.filter(square => availableLocations.includes(square.location)))
+}
+
+const getAvailableMoves = (board: Chess.Board, player: Chess.Color): Chess.Board => {
+  const newBoard = board.map(square => {
+    // Can't do shit without a piece mate
+    const availableMoves = square.piece ? getAvailableMovesForPiece(square, board, player) : []
+
+    return {
+      ...square,
+      availableMoves
+    }
+  })
+
+  return newBoard
 }
 
 export { getAvailableMoves }

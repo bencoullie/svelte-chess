@@ -1,17 +1,13 @@
 import { addPiecesToBoard } from "./addPiecesToBoard"
 import { createChessBoard } from "./createChessBoard"
+import { getAvailableMoves } from "./getAvailableMoves"
 
 const setupNewGame = () => {
   const emptyBoard = createChessBoard()
   const boardWithPieces = addPiecesToBoard(emptyBoard)
+  const boardWithAvailableMoves = getAvailableMoves(boardWithPieces, 'white')
 
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(boardWithPieces)
-    }, 1000)
-  })
-
-  // return boardWithPieces
+  return boardWithAvailableMoves
 }
 
 export { setupNewGame }
