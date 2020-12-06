@@ -35,3 +35,4 @@
     {/each}
   {/if}
 </div>
+<h3>Current player: {$state.context.player}</h3>
