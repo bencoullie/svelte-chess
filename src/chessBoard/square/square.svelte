@@ -5,12 +5,15 @@
   export let onClickCallback: (square: Chess.Square) => void
 
   const handleCLick = () => {
-    handleHoverOff()
     onClickCallback(square)
   }
 
   const handleHoverOn = () => {
-    square.availableMoves.forEach((move) => {
+    if (!square.piece) {
+      return
+    }
+
+    square.piece.availableMoves.forEach((move) => {
       const squareNode = document.querySelector(
         `[data-location="${move.location}"]`
       )
@@ -20,7 +23,11 @@
   }
 
   const handleHoverOff = () => {
-    square.availableMoves.forEach((move) => {
+    if (!square.piece) {
+      return
+    }
+
+    square.piece.availableMoves.forEach((move) => {
       const squareNode = document.querySelector(
         `[data-location="${move.location}"]`
       )
@@ -29,9 +36,7 @@
     })
   }
 
-  const backgroundImage = square.piece
-    ? getBackgroundImage(square.piece)
-    : undefined
+  const backgroundImage = square.piece && getBackgroundImage(square.piece)
 </script>
 
 <style>
@@ -62,6 +67,11 @@
   .highlighted {
     opacity: 0.7;
   }
+
+  .is-active {
+    box-shadow: 0 0px 10px -3px black;
+    z-index: 1;
+  }
 </style>
 
 <div
@@ -69,7 +79,7 @@
   on:mouseenter={handleHoverOn}
   on:mouseleave={handleHoverOff}
   data-location={square.location}
-  class={`square ${square.color}`}
+  class={`square ${square.color} ${square.piece && square.piece.isActive && 'is-active'}`}
   style={backgroundImage && `background-image: url(${backgroundImage})`}>
   <div class="location">{square.location}</div>
 </div>

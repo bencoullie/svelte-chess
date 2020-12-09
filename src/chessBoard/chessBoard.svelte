@@ -6,11 +6,9 @@
   const { state, send } = useMachine(machine, { devTools: true })
 
   const handleClick = (sqaure: Chess.Square) => {
-    if (!sqaure.piece) {
-      return
+    if (sqaure.piece) {
+      send({ type: 'SELECT_PIECE', squareLocation: sqaure.location })
     }
-
-    send('MOVE')
   }
 </script>
 

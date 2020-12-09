@@ -1,30 +1,10 @@
 import { assign, Machine } from 'xstate'
-import { getAvailableMoves } from '../utilities/getAvailableMoves'
 import { setupNewGame } from '../utilities/setupNewGame'
+import { activatePiece } from './actions/activatePiece'
+import { recalculateAvailableMoves } from './actions/recalculateAvailableMoves'
+import { swapPlayer } from './actions/swapPlayer'
 
-// Schema for all possible states
-interface ChessStateSchema {
-  states: {
-    setup: {},
-    play: {},
-    gameOver: {},
-  }
-}
-
-// The events that the machine handles
-type ChessEvent =
-  | { type: 'CHECKMATE' }
-  | { type: 'RESET' }
-  | { type: 'PLAY_AGAIN' }
-  | { type: 'MOVE' }
-
-// The context (extended state) of the machine
-interface ChessContext {
-  board: Chess.Board
-  player: Chess.Color
-}
-
-const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
+const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
   {
     id: 'Machine',
     initial: 'setup',
@@ -53,6 +33,10 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
             target: 'play',
             actions: ['swapPlayer', 'recalculateAvailableMoves'],
           },
+          SELECT_PIECE: {
+            target: 'play',
+            actions: ['activatePiece'],
+          },
         },
       },
       gameOver: {
@@ -64,14 +48,9 @@ const machine = Machine<ChessContext, ChessStateSchema, ChessEvent>(
   },
   {
     actions: {
-      swapPlayer: assign(context => ({
-        ...context,
-        player: context.player === 'white' ? 'black' : 'white'
-      })),
-      recalculateAvailableMoves: assign(context => ({
-        ...context,
-        board: getAvailableMoves(context.board, context.player)
-      })),
+      swapPlayer: assign(swapPlayer),
+      activatePiece: assign(activatePiece),
+      recalculateAvailableMoves: assign(recalculateAvailableMoves),
     },
     services: {
       createChessBoard: () => new Promise(resolve => resolve(setupNewGame())),

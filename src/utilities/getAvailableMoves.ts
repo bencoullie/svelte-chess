@@ -1,6 +1,4 @@
-import cloneDeep from 'lodash.clonedeep'
-
-const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, player: Chess.Color) => {
+const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, player: Chess.Color): Chess.Square[] => {
   const { piece, location } = square
 
   // Can't move the other player's pieces... that would be too easy
@@ -31,17 +29,23 @@ const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, pla
     }
   }
 
-  return cloneDeep(board.filter(square => availableLocations.includes(square.location)))
+  // Now we return a subset of the board which represent available moves for that piece
+  return board.filter(square => availableLocations.includes(square.location))
 }
 
 const getAvailableMoves = (board: Chess.Board, player: Chess.Color): Chess.Board => {
   const newBoard = board.map(square => {
     // Can't do shit without a piece mate
-    const availableMoves = square.piece ? getAvailableMovesForPiece(square, board, player) : []
+    if (!square.piece) {
+      return square
+    }
 
     return {
       ...square,
-      availableMoves
+      piece: {
+        ...square.piece,
+        availableMoves: getAvailableMovesForPiece(square, board, player)
+      }
     }
   })
 

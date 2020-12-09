@@ -5,7 +5,7 @@ const createChessBoard = () => {
   let colorDirection = false
 
   for (var i = 0; i < 64; i++) {
-    const square: Chess.Square = { color: 'white', location: 'a1', availableMoves: [] }
+    const square: Chess.Square = { color: 'white', location: 'a1' }
     const shouldChangeStartingColor = i % 8 === 0
 
     // Assign correct location on board

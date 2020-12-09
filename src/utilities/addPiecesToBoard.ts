@@ -7,7 +7,9 @@ const addPiecesToBoard = (board: Chess.Board): Chess.Board => {
     if (isBlackPawnStartingLocation || isWhitePawnStartingLocation) {
       const piece: Chess.Piece = {
         type: 'pawn',
-        color: isBlackPawnStartingLocation ? 'black' : 'white'
+        color: isBlackPawnStartingLocation ? 'black' : 'white',
+        availableMoves: [],
+        isActive: false
       }
 
       return {

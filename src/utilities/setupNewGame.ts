@@ -6,7 +6,7 @@ const setupNewGame = () => {
   const emptyBoard = createChessBoard()
   const boardWithPieces = addPiecesToBoard(emptyBoard)
   const boardWithAvailableMoves = getAvailableMoves(boardWithPieces, 'white')
-
+ 
   return boardWithAvailableMoves
 }
 
