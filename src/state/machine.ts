@@ -1,6 +1,7 @@
 import { assign, Machine } from 'xstate'
 import { setupNewGame } from '../utilities/setupNewGame'
 import { activatePiece } from './actions/activatePiece'
+import { movePiece } from './actions/movePiece'
 import { recalculateAvailableMoves } from './actions/recalculateAvailableMoves'
 import { swapPlayer } from './actions/swapPlayer'
 
@@ -31,7 +32,7 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
           RESET: 'setup',
           MOVE: {
             target: 'play',
-            actions: ['swapPlayer', 'recalculateAvailableMoves'],
+            actions: ['movePiece', 'swapPlayer', 'recalculateAvailableMoves'],
           },
           SELECT_PIECE: {
             target: 'play',
@@ -50,6 +51,7 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
     actions: {
       swapPlayer: assign(swapPlayer),
       activatePiece: assign(activatePiece),
+      movePiece: assign(movePiece),
       recalculateAvailableMoves: assign(recalculateAvailableMoves),
     },
     services: {

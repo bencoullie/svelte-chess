@@ -6,7 +6,7 @@ declare global {
     /////////////////////////////////////
     // Chess game types and interfaces //
     /////////////////////////////////////
-    
+
     declare type Color = 'white' | 'black'
 
     declare type PieceType = 'pawn'
@@ -46,7 +46,7 @@ declare global {
       | { type: 'CHECKMATE' }
       | { type: 'RESET' }
       | { type: 'PLAY_AGAIN' }
-      | { type: 'MOVE' }
+      | { type: 'MOVE', newLocation: Chess.Location }
       | { type: 'SELECT_PIECE', squareLocation: Chess.Location }
       
     // The context (extended state) of the machine

@@ -35,8 +35,6 @@
       squareNode.classList.remove('highlighted')
     })
   }
-
-  const backgroundImage = square.piece && getBackgroundImage(square.piece)
 </script>
 
 <style>
@@ -80,6 +78,6 @@
   on:mouseleave={handleHoverOff}
   data-location={square.location}
   class={`square ${square.color} ${square.piece && square.piece.isActive && 'is-active'}`}
-  style={backgroundImage && `background-image: url(${backgroundImage})`}>
+  style={square.piece && `background-image: url(${getBackgroundImage(square.piece)})`}>
   <div class="location">{square.location}</div>
 </div>
