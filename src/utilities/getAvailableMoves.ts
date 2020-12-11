@@ -1,3 +1,5 @@
+import { getMovesForPawn } from "./moves/getMovesForPawn"
+
 const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, player: Chess.Color): Chess.Square[] => {
   const { piece, location } = square
 
@@ -6,31 +8,19 @@ const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, pla
     return []
   }
 
-  const availableLocations = []
+  const availableLocations = new Set<string>()
   const splitLocation = location.split('')
   const isWhitePiece = piece.color === 'white'
   const file = Number(splitLocation[1])
-  // const rank = splitLocation[0]
+  const rank = splitLocation[0]
 
   // Pawns
   if (piece.type === 'pawn') {
-    const isStartingPosition = isWhitePiece ? 
-      location.includes('2') : 
-      location.includes('7')
-
-    const singleRankChange = isWhitePiece ? file + 1 : file - 1
-    const singleStep = location.slice(0, -1) + singleRankChange
-    availableLocations.push(singleStep)
-
-    if (isStartingPosition) {
-      const doubleRankChange = isWhitePiece ? file + 2 : file - 2
-      const doubleStep = location.slice(0, -1) + doubleRankChange
-      availableLocations.push(doubleStep)
-    }
+    getMovesForPawn({ board, availableLocations, isWhitePiece, location, file, rank, player })
   }
 
   // Now we return a subset of the board which represent available moves for that piece
-  return board.filter(square => availableLocations.includes(square.location))
+  return board.filter(square => availableLocations.has(square.location))
 }
 
 const getAvailableMoves = (board: Chess.Board, player: Chess.Color): Chess.Board => {

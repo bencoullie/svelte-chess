@@ -10,6 +10,9 @@ const movePiece = (context: Chess.Context, event: Chess.Event) => {
     // Add piece to destination square
     destinationSquare.piece = currentlyActiveSquare.piece
 
+    // Remove active state from moved piece
+    destinationSquare.piece.isActive = false
+
     // Remove piece from active square
     delete currentlyActiveSquare.piece
 
