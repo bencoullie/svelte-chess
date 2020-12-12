@@ -35,6 +35,24 @@ const addPiecesToBoard = (board: Chess.Board): Chess.Board => {
         piece,
       }
     }
+
+    // Knights
+    const isWhiteKnightStartingLocation = square.location === 'b1' || square.location === 'g1'
+    const isBlackKnightStartingLocation = square.location === 'b8' || square.location === 'g8'
+
+    if (isWhiteKnightStartingLocation || isBlackKnightStartingLocation) {
+      const piece: Chess.Piece = {
+        type: 'knight',
+        color: isWhiteKnightStartingLocation ? 'white' : 'black',
+        availableMoves: [],
+        isActive: false
+      }
+
+      return {
+        ...square,
+        piece,
+      }
+    }
     
     return square
   })
