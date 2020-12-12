@@ -3,7 +3,6 @@ import { getPreviousLetter } from "../getPreviousLetter"
 
 interface RequiredContext {
   board: Chess.Board, 
-  availableLocations: Set<string>, 
   isWhitePiece: boolean, 
   location: Chess.Location, 
   file: number, 
@@ -12,9 +11,10 @@ interface RequiredContext {
 }
 
 const getMovesForPawn = (requiredContext: RequiredContext) => {
-  const { board, availableLocations, isWhitePiece, location, file, rank, player } = requiredContext
+  const { board, isWhitePiece, location, file, rank, player } = requiredContext
+  const availableLocations = new Set<string>()
 
-  // Pawn moving rules
+  // moving rules
   const isStartingPosition = isWhitePiece ? 
   location.includes('2') : 
   location.includes('7')
@@ -36,7 +36,7 @@ const getMovesForPawn = (requiredContext: RequiredContext) => {
     }
   }
 
-  // pawn taking rules
+  // Taking rules
   const rightOption = getNextLetter(rank) + singleFileChange
   const leftOption = getPreviousLetter(rank) + singleFileChange
   const rightOptionIsAGoBoi = board.some(square => square.location === rightOption && square.piece && square.piece.color !== player)
@@ -49,6 +49,11 @@ const getMovesForPawn = (requiredContext: RequiredContext) => {
   if (leftOptionIsAGoBoi) {
     availableLocations.add(leftOption)
   }
+
+  // eslint-disable-next-line no-console
+  console.log('availableLocations pawn:', availableLocations)
+
+  return availableLocations
 }
 
 export { getMovesForPawn }
