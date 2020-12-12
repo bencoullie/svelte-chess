@@ -39,8 +39,8 @@ const getMovesForPawn = (requiredContext: RequiredContext) => {
   // Taking rules
   const rightOption = getNextLetter(rank) + singleFileChange
   const leftOption = getPreviousLetter(rank) + singleFileChange
-  const rightOptionIsAGoBoi = board.some(square => square.location === rightOption && square.piece && square.piece.color !== player)
-  const leftOptionIsAGoBoi = board.some(square => square.location === leftOption && square.piece && square.piece.color !== player)
+  const rightOptionIsAGoBoi = board.some(square => square.location === rightOption && square.piece && square.piece.color !== player) && rightOption !== singleStepLocation
+  const leftOptionIsAGoBoi = board.some(square => square.location === leftOption && square.piece && square.piece.color !== player) && leftOption !== singleStepLocation
 
   if (rightOptionIsAGoBoi) {
     availableLocations.add(rightOption)
@@ -49,9 +49,6 @@ const getMovesForPawn = (requiredContext: RequiredContext) => {
   if (leftOptionIsAGoBoi) {
     availableLocations.add(leftOption)
   }
-
-  // eslint-disable-next-line no-console
-  console.log('availableLocations pawn:', availableLocations)
 
   return availableLocations
 }
