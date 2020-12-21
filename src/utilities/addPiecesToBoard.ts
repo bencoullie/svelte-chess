@@ -71,6 +71,25 @@ const addPiecesToBoard = (board: Chess.Board): Chess.Board => {
         piece,
       }
     }
+
+
+    // Queens
+    const isWhiteQueenStartingLocation = square.location === 'd1'
+    const isBlackQueenStartingLocation = square.location === 'd8'
+
+    if (isWhiteQueenStartingLocation || isBlackQueenStartingLocation) {
+      const piece: Chess.Piece = {
+        type: 'queen',
+        color: isWhiteQueenStartingLocation ? 'white' : 'black',
+        availableMoves: [],
+        isActive: false
+      }
+
+      return {
+        ...square,
+        piece,
+      }
+    }
     
     return square
   })
