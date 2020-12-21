@@ -53,6 +53,24 @@ const addPiecesToBoard = (board: Chess.Board): Chess.Board => {
         piece,
       }
     }
+
+    // Bishops
+    const isWhiteBishopStartingLocation = square.location === 'c1' || square.location === 'f1'
+    const isBlackBishopStartingLocation = square.location === 'c8' || square.location === 'f8'
+
+    if (isWhiteBishopStartingLocation || isBlackBishopStartingLocation) {
+      const piece: Chess.Piece = {
+        type: 'bishop',
+        color: isWhiteBishopStartingLocation ? 'white' : 'black',
+        availableMoves: [],
+        isActive: false
+      }
+
+      return {
+        ...square,
+        piece,
+      }
+    }
     
     return square
   })
