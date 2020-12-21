@@ -1,3 +1,4 @@
+import { getMovesForKnight } from "./moves/getMovesForKnight"
 import { getMovesForPawn } from "./moves/getMovesForPawn"
 import { getMovesForRook } from "./moves/getMovesForRook"
 
@@ -25,7 +26,12 @@ const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, pla
   if (piece.type === 'rook') {
     const movesForRook = getMovesForRook({ board, isWhitePiece, location, file, rank, player })
     availableLocations = new Set<string>([...availableLocations, ...movesForRook])
-    getMovesForRook({ board, isWhitePiece, location, file, rank, player })
+  }
+
+  // Knights
+  if (piece.type === 'knight') {
+    const movesForKnight = getMovesForKnight({ board, isWhitePiece, location, file, rank, player })
+    availableLocations = new Set<string>([...availableLocations, ...movesForKnight])
   }
 
   // Now we return a subset of the board which represent available moves for that piece
