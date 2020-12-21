@@ -90,6 +90,24 @@ const addPiecesToBoard = (board: Chess.Board): Chess.Board => {
         piece,
       }
     }
+
+    // Kings
+    const isWhiteKingStartingLocation = square.location === 'e1'
+    const isBlackKingStartingLocation = square.location === 'e8'
+
+    if (isWhiteKingStartingLocation || isBlackKingStartingLocation) {
+      const piece: Chess.Piece = {
+        type: 'king',
+        color: isWhiteKingStartingLocation ? 'white' : 'black',
+        availableMoves: [],
+        isActive: false
+      }
+
+      return {
+        ...square,
+        piece,
+      }
+    }
     
     return square
   })

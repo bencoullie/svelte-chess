@@ -9,7 +9,7 @@ declare global {
 
     declare type Color = 'white' | 'black'
 
-    declare type PieceType = 'pawn' | 'rook' | 'knight' | 'bishop' | 'queen'
+    declare type PieceType = 'pawn' | 'rook' | 'knight' | 'bishop' | 'queen' | 'king'
 
     declare type Location = typeof locations[number]
 
