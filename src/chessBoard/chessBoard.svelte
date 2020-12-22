@@ -1,15 +1,15 @@
 <script lang="ts">
-  import Square from './square/square.svelte'
-  import { useMachine } from 'xstate-svelte'
-  import { machine } from '../state/machine'
+  import Square from "./square/square.svelte";
+  import { useMachine } from "xstate-svelte";
+  import { machine } from "../state/machine";
 
-  const { state, send } = useMachine(machine, { devTools: true })
+  const { state, send } = useMachine(machine, { devTools: true });
 
   const handleClick = (sqaure: Chess.Square) => {
-    const clickedPiece = sqaure.piece
+    const clickedPiece = sqaure.piece;
     const alreadyActiveSquare = $state.context.board.find(
       (square) => square.piece?.isActive
-    )
+    );
 
     // They've just clicked a piece on the board
     if (clickedPiece) {
@@ -17,16 +17,16 @@
       if (alreadyActiveSquare) {
         if (sqaure.location === alreadyActiveSquare.location) {
           // They just clicked their own active piece, so we deselect it
-          send({ type: 'SELECT_PIECE', squareLocation: sqaure.location })
+          send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
         } else {
           // Else they must have clicked an enemy piece so we try attack it
           const isViableTake = alreadyActiveSquare.piece.availableMoves.some(
             (possibleMove) => possibleMove.location === sqaure.location
-          )
+          );
 
           // But only allow viable takes
           if (isViableTake) {
-            send({ type: 'MOVE', newLocation: sqaure.location })
+            send({ type: "MOVE", newLocation: sqaure.location });
           }
         }
       }
@@ -36,7 +36,7 @@
         // And they're clicking one of their own pieces
         if (clickedPiece.color === $state.context.player) {
           // So let's activate it for them
-          send({ type: 'SELECT_PIECE', squareLocation: sqaure.location })
+          send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
         }
       }
     }
@@ -48,15 +48,15 @@
         // So we try make the move
         const isViableMove = alreadyActiveSquare.piece.availableMoves.some(
           (possibleMove) => possibleMove.location === sqaure.location
-        )
+        );
 
         // But only make viable moves
         if (isViableMove) {
-          send({ type: 'MOVE', newLocation: sqaure.location })
+          send({ type: "MOVE", newLocation: sqaure.location });
         }
       }
     }
-  }
+  };
 </script>
 
 <style>
@@ -76,7 +76,10 @@
     <span>Setting up the board...</span>
   {:else if $state.matches('play')}
     {#each $state.context.board as square}
-      <Square onClickCallback={handleClick} {square} />
+      <Square
+        onClickCallback={handleClick}
+        player={$state.context.player}
+        {square} />
     {/each}
   {/if}
 </div>

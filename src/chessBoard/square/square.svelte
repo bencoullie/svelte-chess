@@ -2,6 +2,7 @@
   import { getBackgroundImage } from '../../utilities/getBackgroundImage'
 
   export let square: Chess.Square
+  export let player: Chess.Color
   export let onClickCallback: (square: Chess.Square) => void
 
   const handleCLick = () => {
@@ -10,6 +11,10 @@
 
   const handleHoverOn = () => {
     if (!square.piece) {
+      return
+    }
+
+    if (square.piece.color !== player) {
       return
     }
 
