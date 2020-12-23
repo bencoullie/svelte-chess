@@ -19,14 +19,19 @@
           // They just clicked their own active piece, so we deselect it
           send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
         } else {
-          // Else they must have clicked an enemy piece so we try attack it
-          const isViableTake = alreadyActiveSquare.piece.availableMoves.some(
-            (possibleMove) => possibleMove.location === sqaure.location
-          );
+          // They've clicked another of their pieces
+          if (clickedPiece.color === $state.context.player) {
+            send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
+          } else {
+            // Else they must have clicked an enemy piece so we try attack it
+            const isViableTake = alreadyActiveSquare.piece.availableMoves.some(
+              (possibleMove) => possibleMove.location === sqaure.location
+            );
 
-          // But only allow viable takes
-          if (isViableTake) {
-            send({ type: "MOVE", newLocation: sqaure.location });
+            // But only allow viable takes
+            if (isViableTake) {
+              send({ type: "MOVE", newLocation: sqaure.location });
+            }
           }
         }
       }
