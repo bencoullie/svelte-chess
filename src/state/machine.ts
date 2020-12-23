@@ -1,4 +1,5 @@
 import { assign, Machine } from 'xstate'
+import { alertBadMove } from '../utilities/alertBadMove'
 import { setupNewGame } from '../utilities/setupNewGame'
 import { activatePiece } from './actions/activatePiece'
 import { movePiece } from './actions/movePiece'
@@ -32,10 +33,12 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
           RESET: 'setup',
           MOVE: {
             target: 'play',
+            cond: 'isLegalMove',
             actions: ['movePiece', 'swapPlayer', 'recalculateAvailableMoves'],
           },
           SELECT_PIECE: {
             target: 'play',
+            // TODO: use a condition here to make sure you're selecting correct piece
             actions: ['activatePiece'],
           },
         },
@@ -57,6 +60,12 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
     services: {
       createChessBoard: () => new Promise(resolve => resolve(setupNewGame())),
     },
+    guards: {
+      isLegalMove: (context, event) => {
+        // alertBadMove()
+        return true
+      }
+    }
   },
 )
 

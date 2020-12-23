@@ -1,5 +1,6 @@
 <script lang="ts">
   import ChessBoard from "./chessBoard/chessBoard.svelte";
+  import "toastify-js/src/toastify.css";
 </script>
 
 <style>
