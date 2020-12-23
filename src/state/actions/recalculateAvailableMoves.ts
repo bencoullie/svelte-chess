@@ -1,7 +1,6 @@
 import { getAvailableMoves } from "../../utilities/getAvailableMoves";
 
-const recalculateAvailableMoves = (context: Chess.Context): Chess.Context => ({
-  ...context,
+const recalculateAvailableMoves = (context: Chess.Context) => ({
   board: getAvailableMoves(context.board, context.player)
 })
 

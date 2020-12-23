@@ -1,10 +1,6 @@
-import cloneDeep from 'lodash.clonedeep'
-
 const activatePiece = (context: Chess.Context, event: Chess.Event) => {
   if (event.type === 'SELECT_PIECE') {
-    const newContext: Chess.Context = cloneDeep(context)
-    
-    newContext.board.forEach(square => {
+    context.board.forEach(square => {
       if (!square.piece) {
         return
       }
@@ -16,7 +12,7 @@ const activatePiece = (context: Chess.Context, event: Chess.Event) => {
       }
     })
 
-    return newContext
+    return { board: context.board }
   }
 }
 
