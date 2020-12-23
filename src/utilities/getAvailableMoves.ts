@@ -86,4 +86,4 @@ const getAvailableMoves = (board: Chess.Board, player: Chess.Color): Chess.Board
   return finalBoard
 }
 
-export { getAvailableMoves }
+export { getAvailableMoves, getAvailableMovesForPiece }

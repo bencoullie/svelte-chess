@@ -1,10 +1,10 @@
 import { assign, Machine } from 'xstate'
-import { alertBadMove } from '../utilities/alertBadMove'
-import { setupNewGame } from '../utilities/setupNewGame'
 import { activatePiece } from './actions/activatePiece'
 import { movePiece } from './actions/movePiece'
 import { recalculateAvailableMoves } from './actions/recalculateAvailableMoves'
 import { swapPlayer } from './actions/swapPlayer'
+import { isLegalMove } from './guards/isLegalMove'
+import { createChessBoard } from './services/createChessBoard'
 
 const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
   {
@@ -58,13 +58,10 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
       recalculateAvailableMoves: assign(recalculateAvailableMoves),
     },
     services: {
-      createChessBoard: () => new Promise(resolve => resolve(setupNewGame())),
+      createChessBoard,
     },
     guards: {
-      isLegalMove: (context, event) => {
-        // alertBadMove()
-        return true
-      }
+      isLegalMove
     }
   },
 )

@@ -1,4 +1,4 @@
-import { locations } from "../createChessBoard"
+import { locations } from "../createEmptyChessBoard"
 import { getNextLetter } from "../getNextLetter"
 import { getPreviousLetter } from "../getPreviousLetter"
 

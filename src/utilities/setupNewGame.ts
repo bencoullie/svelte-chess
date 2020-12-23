@@ -1,9 +1,9 @@
 import { addPiecesToBoard } from "./addPiecesToBoard"
-import { createChessBoard } from "./createChessBoard"
+import { createEmptyChessBoard } from "./createEmptyChessBoard"
 import { getAvailableMoves } from "./getAvailableMoves"
 
 const setupNewGame = () => {
-  const emptyBoard = createChessBoard()
+  const emptyBoard = createEmptyChessBoard()
   const boardWithPieces = addPiecesToBoard(emptyBoard)
   const boardWithAvailableMoves = getAvailableMoves(boardWithPieces, 'white')
  
