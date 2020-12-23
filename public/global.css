@@ -1,0 +1,8 @@
+/* Additional notification styles */
+.toastify {
+  padding: 25px;
+  font-size: 25px;
+  font-family: 'Lato';
+  box-shadow: 0 0px 8px 0px #bbb;
+  color: #fff;
+}
