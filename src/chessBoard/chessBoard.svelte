@@ -2,65 +2,16 @@
   import Square from "./square/square.svelte";
   import { useMachine } from "xstate-svelte";
   import { machine } from "../state/machine";
+  import { handleSquareClick } from "../utilities/handleSquareClick";
 
+  // Get our state and event sender func from the state machine
   const { state, send } = useMachine(machine, { devTools: true });
 
   const handleClick = (sqaure: Chess.Square) => {
-    const clickedPiece = sqaure.piece;
-    const alreadyActiveSquare = $state.context.board.find(
-      (square) => square.piece?.isActive
-    );
-
-    // They've just clicked a piece on the board
-    if (clickedPiece) {
-      // There is already an active piece on the board
-      if (alreadyActiveSquare) {
-        if (sqaure.location === alreadyActiveSquare.location) {
-          // They just clicked their own active piece, so we deselect it
-          send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
-        } else {
-          // They've clicked another of their pieces
-          if (clickedPiece.color === $state.context.player) {
-            send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
-          } else {
-            // Else they must have clicked an enemy piece so we try attack it
-            const isViableTake = alreadyActiveSquare.piece.availableMoves.some(
-              (possibleMove) => possibleMove.location === sqaure.location
-            );
-
-            // But only allow viable takes
-            if (isViableTake) {
-              send({ type: "MOVE", newLocation: sqaure.location });
-            }
-          }
-        }
-      }
-
-      // They haven't got an activated piece
-      if (!alreadyActiveSquare) {
-        // And they're clicking one of their own pieces
-        if (clickedPiece.color === $state.context.player) {
-          // So let's activate it for them
-          send({ type: "SELECT_PIECE", squareLocation: sqaure.location });
-        }
-      }
-    }
-
-    // They've just clicked an empty square
-    if (!clickedPiece) {
-      // And they currently have an active piece
-      if (alreadyActiveSquare) {
-        // So we try make the move
-        const isViableMove = alreadyActiveSquare.piece.availableMoves.some(
-          (possibleMove) => possibleMove.location === sqaure.location
-        );
-
-        // But only make viable moves
-        if (isViableMove) {
-          send({ type: "MOVE", newLocation: sqaure.location });
-        }
-      }
-    }
+    // Function used to send events to state machine (redefined for ease of typing)
+    const sendFunc = (event: Chess.Event) => send(event);
+    const { board, player } = $state.context;
+    handleSquareClick(sqaure, board, player, sendFunc);
   };
 </script>
 
@@ -89,6 +40,6 @@
   {/if}
 </div>
 <h3>
-  <!-- Capitalise the color 🤷‍♂️ -->
+  <!-- Capitalise the player color 🤷‍♂️ -->
   {`${$state.context.player[0].toUpperCase()}${$state.context.player.substring(1)}'s turn`}
 </h3>
