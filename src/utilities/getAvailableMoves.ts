@@ -13,6 +13,11 @@ const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, pla
   const rank = splitLocation[0]
   let availableLocations = new Set<string>()
 
+  // No need to get moves to other player until it's their turn
+  if (piece.color !== player) {
+    return []
+  }
+
   // Pawns
   if (piece.type === 'pawn') {
     const movesForPawn = getMovesForPawn({ board, isWhitePiece, location, file, rank, player })
@@ -43,15 +48,20 @@ const getAvailableMovesForPiece = (square: Chess.Square, board: Chess.Board, pla
     availableLocations = new Set<string>([...availableLocations, ...movesForQueen])
   }
 
+  // Kings
+  if (piece.type === 'king') {
+    const movesForKing = getMovesForKing({ board, player, location })
+    availableLocations = new Set<string>([...availableLocations, ...movesForKing])
+  }
+
   // Now we return a subset of the board which represent available moves for that piece
   return board.filter(square => availableLocations.has(square.location))
 }
 
 const getAvailableMoves = (board: Chess.Board, player: Chess.Color): Chess.Board => {
-  // TODO: make it so we can only move king if king is threatened
-  
-  // First we grab the moves for all non-king units and add them to the board
-  const boardWithNonKingMoves = board.map(square => {
+  // Add all available moves to the board
+  // MOTE: might include illegal moves - those will be handled by a state machine guard.
+  const boardWithMoves = board.map(square => {
     // Can't do shit without a piece mate
     if (!square.piece) {
       return square
@@ -66,24 +76,7 @@ const getAvailableMoves = (board: Chess.Board, player: Chess.Color): Chess.Board
     }
   })
 
-  // Then we add in the king moves.
-  // We do this after adding non-king moves as kings need to know which squares are threatened.
-  const finalBoard = boardWithNonKingMoves.map(square => {
-    if (!square.piece || square.piece.type !== 'king') {
-      return square
-    }
-
-    const { location } = square
-    return {
-      ...square,
-      piece: {
-        ...square.piece,
-        availableMoves: getMovesForKing({ boardWithNonKingMoves, player, location })
-      }
-    }
-  })
-
-  return finalBoard
+  return boardWithMoves
 }
 
 export { getAvailableMoves, getAvailableMovesForPiece }

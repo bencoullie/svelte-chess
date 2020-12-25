@@ -88,4 +88,7 @@
     {/each}
   {/if}
 </div>
-<h3>Current player: {$state.context.player}</h3>
+<h3>
+  <!-- Capitalise the color 🤷‍♂️ -->
+  {`${$state.context.player[0].toUpperCase()}${$state.context.player.substring(1)}'s turn`}
+</h3>

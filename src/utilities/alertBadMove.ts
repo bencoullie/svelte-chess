@@ -1,8 +1,8 @@
 import Toastify from 'toastify-js'
 
-const alertBadMove = () => {
+const alertBadMove = (text: string) => {
   const defaults = {
-    text: 'Illegal move: your king would be in check.',
+    text,
     gravity: "top",
     position: "center",
     backgroundColor: '#f87d58',

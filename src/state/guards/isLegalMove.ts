@@ -31,16 +31,11 @@ const isLegalMove = (context: Chess.Context, event: Chess.Event) => {
       return isOwnPiece && isKing
     }).location
 
-    // Determine all possible moves for opponent 
-    // (but only for pieces that can produce a discovered check)
+    // Find out if the player's king would be in check if they made this move 
     const pieceCapableOfCheck = temporaryBoard.find(square => {
       // If there is no opposing piece on that square, ignore it
       const isOpposingPiece = square.piece && square.piece.color === enemyPlayer
       if (!isOpposingPiece) return false
-
-      // If piece is not possible of discovered check, ignore it
-      const piecesCapableOfDiscoveredCheck = ['bishop', 'queen', 'rook']
-      if (!piecesCapableOfDiscoveredCheck.includes(square.piece.type)) return false
 
       // So there is a potential threat but if it doesn't actually check the king, ignore it
       // Note: we pass through enemy player here as we're thinking ahead (before swapping player)
@@ -52,11 +47,12 @@ const isLegalMove = (context: Chess.Context, event: Chess.Event) => {
       return true
     })
     
-    // There is no discovered check, you're free to make the move mate
+    // There is no check, you're free to make the move mate
     if (!pieceCapableOfCheck) return true
 
     // Stop right there criminal scum
-    alertBadMove()
+    alertBadMove(`Checked by ${pieceCapableOfCheck.piece.type} on ${pieceCapableOfCheck.location}.`)
+
     return false
   }
 
