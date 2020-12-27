@@ -33,7 +33,7 @@ declare global {
       location: Location
       piece?: Piece
       // The player who is vulnerable
-      enPassantPlayer: Chess.Color
+      enPassantPlayer?: Chess.Color
     }
 
     declare type Board = Square[]
