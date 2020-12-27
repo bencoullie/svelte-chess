@@ -51,6 +51,7 @@ declare global {
     // The events that the machine handles
     type Event =
       | { type: 'CHECKMATE' }
+      | { type: 'DRAW' }
       | { type: 'RESET' }
       | { type: 'PLAY_AGAIN' }
       | { type: 'MOVE'; newLocation: Chess.Location }

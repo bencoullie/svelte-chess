@@ -32,6 +32,7 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
       play: {
         on: {
           CHECKMATE: 'gameOver',
+          DRAW: 'gameOver',
           RESET: 'setup',
           MOVE: {
             target: 'play',
