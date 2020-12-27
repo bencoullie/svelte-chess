@@ -25,12 +25,15 @@ declare global {
       availableMoves: Square[]
       isActive: boolean
       hasMoved?: boolean
+      isVulnerableToEnPassant?: boolean
     }
 
     declare interface Square {
       color: Color
       location: Location
       piece?: Piece
+      // The player who is vulnerable
+      enPassantPlayer: Chess.Color
     }
 
     declare type Board = Square[]

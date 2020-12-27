@@ -1,3 +1,4 @@
+import { getAttackMovesForPawn } from '../getAttackMovesForPawn'
 import { getNextLetter } from '../getNextLetter'
 import { getPreviousLetter } from '../getPreviousLetter'
 
@@ -64,6 +65,19 @@ const getMovesForPawn = (requiredContext: RequiredContext) => {
 
   if (leftOptionIsAGoBoi) {
     availableLocations.add(leftOption)
+  }
+
+  // Enable en passant attacks
+  const vulnerableSquare = board.find((square) => square.enPassantPlayer)
+  if (vulnerableSquare && vulnerableSquare.enPassantPlayer !== player) {
+    const pawnSquare = board.find((square) => square.location === location)
+    const possiblePawnAttacks = getAttackMovesForPawn(pawnSquare)
+
+    possiblePawnAttacks.forEach((location) => {
+      if (vulnerableSquare.location === location) {
+        availableLocations.add(vulnerableSquare.location)
+      }
+    })
   }
 
   return availableLocations
