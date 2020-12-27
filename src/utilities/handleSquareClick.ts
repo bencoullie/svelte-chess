@@ -32,15 +32,28 @@ const handleSquareClick = (
       } else {
         // They've clicked another of their pieces
         if (clickedPiece.color === player) {
+          // Check to see if it looks like they're trying to castle
           const isKingActive = alreadyActiveSquare.piece.type === 'king'
           const hasClickedRook = square.piece.type === 'rook'
-          const tryingToCastle = isKingActive && hasClickedRook
+          const originalKingPosition = player === 'white' ? 'e1' : 'e8'
+          const originalRookPositions =
+            player === 'white' ? ['a1', 'h1'] : ['a8', 'h8']
+          const kingIsInOriginalPosition =
+            alreadyActiveSquare.location === originalKingPosition
+          const rookIsInOriginalPosition = originalRookPositions.includes(
+            square.location
+          )
+          const tryingToCastle =
+            isKingActive &&
+            hasClickedRook &&
+            kingIsInOriginalPosition &&
+            rookIsInOriginalPosition
 
           if (tryingToCastle) {
-            // TODO: Handle castling
-            console.log('trying to castle!')
+            // Try castle (guard should handle illegal castling)
+            send({ type: 'CASTLE', rookLocation: square.location })
           } else {
-            // If they're not trying to castle we select the clicked allied piece
+            // They're not trying to castle so we deselect the king and select the rook
             send({ type: 'SELECT_PIECE', squareLocation: square.location })
           }
         } else {

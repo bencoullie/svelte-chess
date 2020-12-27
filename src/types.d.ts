@@ -1,4 +1,4 @@
-import { locations } from "./utilities/createChessBoard";
+import { locations } from './utilities/createEmptyChessBoard'
 
 // Just easier and a little cleaner than importing types all over the show
 declare global {
@@ -9,7 +9,13 @@ declare global {
 
     declare type Color = 'white' | 'black'
 
-    declare type PieceType = 'pawn' | 'rook' | 'knight' | 'bishop' | 'queen' | 'king'
+    declare type PieceType =
+      | 'pawn'
+      | 'rook'
+      | 'knight'
+      | 'bishop'
+      | 'queen'
+      | 'king'
 
     declare type Location = typeof locations[number]
 
@@ -18,14 +24,15 @@ declare global {
       type: PieceType
       availableMoves: Square[]
       isActive: boolean
+      hasMoved?: boolean
     }
-    
+
     declare interface Square {
       color: Color
       location: Location
       piece?: Piece
     }
-    
+
     declare type Board = Square[]
 
     //////////////////////////////////
@@ -35,9 +42,9 @@ declare global {
     // Schema for all possible states
     interface StateSchema {
       states: {
-        setup: {},
-        play: {},
-        gameOver: {},
+        setup: {}
+        play: {}
+        gameOver: {}
       }
     }
 
@@ -46,9 +53,10 @@ declare global {
       | { type: 'CHECKMATE' }
       | { type: 'RESET' }
       | { type: 'PLAY_AGAIN' }
-      | { type: 'MOVE', newLocation: Chess.Location }
-      | { type: 'SELECT_PIECE', squareLocation: Chess.Location }
-      
+      | { type: 'MOVE'; newLocation: Chess.Location }
+      | { type: 'CASTLE'; rookLocation: Chess.Location }
+      | { type: 'SELECT_PIECE'; squareLocation: Chess.Location }
+
     // The context (extended state) of the machine
     interface Context {
       board: Chess.Board
@@ -56,4 +64,3 @@ declare global {
     }
   }
 }
-

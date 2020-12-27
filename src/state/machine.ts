@@ -1,8 +1,10 @@
 import { assign, Machine } from 'xstate'
 import { activatePiece } from './actions/activatePiece'
+import { castle } from './actions/castle'
 import { movePiece } from './actions/movePiece'
 import { recalculateAvailableMoves } from './actions/recalculateAvailableMoves'
 import { swapPlayer } from './actions/swapPlayer'
+import { canCastle } from './guards/canCastle'
 import { isLegalMove } from './guards/isLegalMove'
 import { createChessBoard } from './services/createChessBoard'
 
@@ -22,9 +24,9 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
           onDone: {
             target: 'play',
             actions: assign({
-              board: (context, event) => event.data
+              board: (context, event) => event.data,
             }),
-          }
+          },
         },
       },
       play: {
@@ -36,9 +38,14 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
             cond: 'isLegalMove',
             actions: ['movePiece', 'swapPlayer', 'recalculateAvailableMoves'],
           },
+          CASTLE: {
+            target: 'play',
+            cond: 'canCastle',
+            actions: ['castle', 'swapPlayer', 'recalculateAvailableMoves'],
+          },
           SELECT_PIECE: {
             target: 'play',
-            // TODO: use a condition here to make sure you're selecting correct piece
+            // TODO: use a guard here to make sure you're selecting correct piece
             actions: ['activatePiece'],
           },
         },
@@ -55,15 +62,17 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
       swapPlayer: assign(swapPlayer),
       activatePiece: assign(activatePiece),
       movePiece: assign(movePiece),
+      castle: assign(castle),
       recalculateAvailableMoves: assign(recalculateAvailableMoves),
     },
     services: {
       createChessBoard,
     },
     guards: {
-      isLegalMove
-    }
-  },
+      isLegalMove,
+      canCastle,
+    },
+  }
 )
 
 export { machine }
