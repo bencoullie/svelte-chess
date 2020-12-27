@@ -1,18 +1,15 @@
-import { locations } from "../createEmptyChessBoard"
-import { getNextLetter } from "../getNextLetter"
-import { getPreviousLetter } from "../getPreviousLetter"
+import { locations } from '../createEmptyChessBoard'
+import { getNextLetter } from '../getNextLetter'
+import { getPreviousLetter } from '../getPreviousLetter'
 
 interface RequiredContext {
-  board: Chess.Board, 
-  isWhitePiece: boolean, 
-  location: Chess.Location, 
-  file: number, 
-  rank: string,
+  board: Chess.Board
+  location: Chess.Location
   player: Chess.Color
 }
 
 const getMovesForBishop = (requiredContext: RequiredContext) => {
-  const { board, isWhitePiece, location, file, rank, player } = requiredContext
+  const { board, location, player } = requiredContext
   const availableLocations = new Set<string>()
 
   // Get top left diagonal
@@ -20,7 +17,7 @@ const getMovesForBishop = (requiredContext: RequiredContext) => {
   for (let i = 0; i < 8; i++) {
     const newRank = getPreviousLetter(newTopLeftDiagonalLocation[0])
     const newFile = Number(newTopLeftDiagonalLocation[1]) + 1
-    newTopLeftDiagonalLocation = newRank + newFile as Chess.Location
+    newTopLeftDiagonalLocation = (newRank + newFile) as Chess.Location
 
     // Exit early, we've reached the end of the board
     if (!locations.includes(newTopLeftDiagonalLocation)) {
@@ -28,7 +25,9 @@ const getMovesForBishop = (requiredContext: RequiredContext) => {
     }
 
     // Get square for next possible move
-    const correspondingSquare = board.find(square => square.location === newTopLeftDiagonalLocation)
+    const correspondingSquare = board.find(
+      (square) => square.location === newTopLeftDiagonalLocation
+    )
 
     // If there is no piece there, we're free to move there
     if (!correspondingSquare.piece) {
@@ -52,13 +51,15 @@ const getMovesForBishop = (requiredContext: RequiredContext) => {
   for (let i = 0; i < 8; i++) {
     const newRank = getNextLetter(newTopRightDiagonalLocation[0])
     const newFile = Number(newTopRightDiagonalLocation[1]) + 1
-    newTopRightDiagonalLocation = newRank + newFile as Chess.Location
+    newTopRightDiagonalLocation = (newRank + newFile) as Chess.Location
 
     if (!locations.includes(newTopRightDiagonalLocation)) {
       break
     }
 
-    const correspondingSquare = board.find(square => square.location === newTopRightDiagonalLocation)
+    const correspondingSquare = board.find(
+      (square) => square.location === newTopRightDiagonalLocation
+    )
 
     if (!correspondingSquare.piece) {
       availableLocations.add(newTopRightDiagonalLocation)
@@ -78,13 +79,15 @@ const getMovesForBishop = (requiredContext: RequiredContext) => {
   for (let i = 0; i < 8; i++) {
     const newRank = getNextLetter(newBottomRightDiagonalLocation[0])
     const newFile = Number(newBottomRightDiagonalLocation[1]) - 1
-    newBottomRightDiagonalLocation = newRank + newFile as Chess.Location
+    newBottomRightDiagonalLocation = (newRank + newFile) as Chess.Location
 
     if (!locations.includes(newBottomRightDiagonalLocation)) {
       break
     }
 
-    const correspondingSquare = board.find(square => square.location === newBottomRightDiagonalLocation)
+    const correspondingSquare = board.find(
+      (square) => square.location === newBottomRightDiagonalLocation
+    )
 
     if (!correspondingSquare.piece) {
       availableLocations.add(newBottomRightDiagonalLocation)
@@ -104,13 +107,15 @@ const getMovesForBishop = (requiredContext: RequiredContext) => {
   for (let i = 0; i < 8; i++) {
     const newRank = getPreviousLetter(newBottomLeftDiagonalLocation[0])
     const newFile = Number(newBottomLeftDiagonalLocation[1]) - 1
-    newBottomLeftDiagonalLocation = newRank + newFile as Chess.Location
+    newBottomLeftDiagonalLocation = (newRank + newFile) as Chess.Location
 
     if (!locations.includes(newBottomLeftDiagonalLocation)) {
       break
     }
 
-    const correspondingSquare = board.find(square => square.location === newBottomLeftDiagonalLocation)
+    const correspondingSquare = board.find(
+      (square) => square.location === newBottomLeftDiagonalLocation
+    )
 
     if (!correspondingSquare.piece) {
       availableLocations.add(newBottomLeftDiagonalLocation)

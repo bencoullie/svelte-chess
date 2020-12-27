@@ -1,11 +1,11 @@
-import { locations } from "../createEmptyChessBoard"
-import { getNextLetter } from "../getNextLetter"
-import { getPreviousLetter } from "../getPreviousLetter"
+import { locations } from '../createEmptyChessBoard'
+import { getNextLetter } from '../getNextLetter'
+import { getPreviousLetter } from '../getPreviousLetter'
 
 interface RequiredContext {
   // NOTE: this is the board with all other pieces' available moves already added
   // We need to do this so the kings know which squares are threatened
-  board: Chess.Board, 
+  board: Chess.Board
   location: Chess.Location
   player: Chess.Color
 }
@@ -19,8 +19,17 @@ const getBoundMovesForKing = (rank: string, file: number) => {
   const newTopRightDiagonalLocation = getNextLetter(rank) + (file + 1)
   const newBottomLeftDiagonalLocation = getPreviousLetter(rank) + (file - 1)
   const newBottomRightDiagonalLocation = getNextLetter(rank) + (file - 1)
-  const proposedMoves = [newRightLocation, newLeftLocation, newTopLocation, newBottomLocation, newTopLeftDiagonalLocation, newTopRightDiagonalLocation, newBottomLeftDiagonalLocation, newBottomRightDiagonalLocation] as Chess.Location[]
-  const boundMoves = proposedMoves.filter(move => locations.includes(move))
+  const proposedMoves = [
+    newRightLocation,
+    newLeftLocation,
+    newTopLocation,
+    newBottomLocation,
+    newTopLeftDiagonalLocation,
+    newTopRightDiagonalLocation,
+    newBottomLeftDiagonalLocation,
+    newBottomRightDiagonalLocation,
+  ] as Chess.Location[]
+  const boundMoves = proposedMoves.filter((move) => locations.includes(move))
 
   return boundMoves
 }
@@ -36,14 +45,16 @@ const getMovesForKing = (requiredContext: RequiredContext) => {
   const boundMovesForPlayersKing = getBoundMovesForKing(rank, file)
 
   // Vet those locations (i.e. disallow moves onto squares with allied pieces on them)
-  boundMovesForPlayersKing.forEach(newLocation => {
-    const correspondingSquare = board.find(square => square.location === newLocation)
+  boundMovesForPlayersKing.forEach((newLocation) => {
+    const correspondingSquare = board.find(
+      (square) => square.location === newLocation
+    )
 
     // Can't move onto another of your own pieces
     if (correspondingSquare.piece?.color === player) {
       return
     }
-    
+
     availableLocations.add(newLocation)
   })
 

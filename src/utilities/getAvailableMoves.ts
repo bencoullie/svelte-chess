@@ -37,8 +37,6 @@ const getAvailableMovesForPiece = (
   if (piece.type === 'rook') {
     const movesForRook = getMovesForRook({
       board,
-      isWhitePiece,
-      location,
       file,
       rank,
       player,
@@ -53,8 +51,6 @@ const getAvailableMovesForPiece = (
   if (piece.type === 'knight') {
     const movesForKnight = getMovesForKnight({
       board,
-      isWhitePiece,
-      location,
       file,
       rank,
       player,
@@ -69,10 +65,7 @@ const getAvailableMovesForPiece = (
   if (piece.type === 'bishop') {
     const movesForBishop = getMovesForBishop({
       board,
-      isWhitePiece,
       location,
-      file,
-      rank,
       player,
     })
     availableLocations = new Set<string>([
@@ -85,7 +78,6 @@ const getAvailableMovesForPiece = (
   if (piece.type === 'queen') {
     const movesForQueen = getMovesForQueen({
       board,
-      isWhitePiece,
       location,
       file,
       rank,

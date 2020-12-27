@@ -1,12 +1,11 @@
-import { getMovesForBishop } from "./getMovesForBishop"
-import { getMovesForRook } from "./getMovesForRook"
+import { getMovesForBishop } from './getMovesForBishop'
+import { getMovesForRook } from './getMovesForRook'
 
 interface RequiredContext {
-  board: Chess.Board, 
-  isWhitePiece: boolean, 
-  location: Chess.Location, 
-  file: number, 
-  rank: string,
+  board: Chess.Board
+  location: Chess.Location
+  file: number
+  rank: string
   player: Chess.Color
 }
 
