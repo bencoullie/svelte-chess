@@ -2,19 +2,25 @@ const movePiece = (context: Chess.Context, event: Chess.Event) => {
   if (event.type === 'MOVE') {
     const { newLocation } = event
 
-    // TODO find all of these in a single loop?
-    const currentlyActiveSquare = context.board.find(
-      (square) => square.piece?.isActive
-    )
+    let currentlyActiveSquare
+    let destinationSquare
+    let previousEnPassant
+    let vulnerableToEnPassant
 
-    const destinationSquare = context.board.find(
-      (square) => square.location === newLocation
-    )
+    // Grab a bunch of pointers in a single loop (more performant than multiple finds)
+    context.board.forEach((square) => {
+      // Get the currently active square
+      if (square.piece?.isActive) currentlyActiveSquare = square
 
-    // Get the previous en passant vulnerability (square)
-    const previousEnPassant = context.board.find(
-      (square) => square.enPassantPlayer
-    )
+      // Get move destination square
+      if (square.location === newLocation) destinationSquare = square
+
+      // Get the previous en passant vulnerability (destination square)
+      if (square.enPassantPlayer) previousEnPassant = square
+
+      // Get the previous en passant vulnerability (vulnerable piece)
+      if (square.piece?.isVulnerableToEnPassant) vulnerableToEnPassant = square
+    })
 
     // We need to keep track of pawn double jumps for en passant reasons
     if (currentlyActiveSquare.piece.type === 'pawn') {
@@ -66,11 +72,8 @@ const movePiece = (context: Chess.Context, event: Chess.Event) => {
     // And finally check to see if the move is actually an en passant attack
     const isEnPassantAttack = destinationSquare.enPassantPlayer
     if (isEnPassantAttack) {
-      // if it is we delete the attacked piece
-      const squareToEmpty = context.board.find(
-        (square) => square.piece?.isVulnerableToEnPassant
-      )
-      delete squareToEmpty.piece
+      // If it is we delete the attacked piece
+      delete vulnerableToEnPassant.piece
     }
 
     // Remove any previous en passant opportunities
@@ -79,16 +82,10 @@ const movePiece = (context: Chess.Context, event: Chess.Event) => {
       // Remove jumped square state
       delete previousEnPassant.enPassantPlayer
 
-      // Get the previous en passant vulnerability (pawn square)
-      // We have to do this here as the piece might have been taken
-      const vulnerablePiece = context.board.find(
-        (square) => square.piece?.isVulnerableToEnPassant
-      )
-
       // If we find a vulnerable piece (i.e. it hasn't been taken yet)
-      if (vulnerablePiece) {
+      if (vulnerableToEnPassant && vulnerableToEnPassant.piece) {
         // Remove that vulnerability
-        delete vulnerablePiece.piece.isVulnerableToEnPassant
+        delete vulnerableToEnPassant.piece.isVulnerableToEnPassant
       }
     }
 
