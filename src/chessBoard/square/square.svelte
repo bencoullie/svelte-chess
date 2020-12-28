@@ -1,45 +1,45 @@
 <script lang="ts">
-  import { getBackgroundImage } from '../../utilities/getBackgroundImage'
+  import { getBackgroundImage } from "../../utilities/getBackgroundImage";
 
-  export let square: Chess.Square
-  export let player: Chess.Color
-  export let onClickCallback: (square: Chess.Square) => void
+  export let square: Chess.Square;
+  export let player: Chess.Color;
+  export let onClickCallback: (square: Chess.Square) => void;
 
   const handleCLick = () => {
-    onClickCallback(square)
-  }
+    onClickCallback(square);
+  };
 
   const handleHoverOn = () => {
     if (!square.piece) {
-      return
+      return;
     }
 
     if (square.piece.color !== player) {
-      return
+      return;
     }
 
     square.piece.availableMoves.forEach((move) => {
       const squareNode = document.querySelector(
         `[data-location="${move.location}"]`
-      )
+      );
 
-      squareNode.classList.add('highlighted')
-    })
-  }
+      squareNode.classList.add("highlighted");
+    });
+  };
 
   const handleHoverOff = () => {
     if (!square.piece) {
-      return
+      return;
     }
 
     square.piece.availableMoves.forEach((move) => {
       const squareNode = document.querySelector(
         `[data-location="${move.location}"]`
-      )
+      );
 
-      squareNode.classList.remove('highlighted')
-    })
-  }
+      squareNode.classList.remove("highlighted");
+    });
+  };
 </script>
 
 <style>
@@ -75,6 +75,10 @@
     box-shadow: 0 0px 10px -3px black;
     z-index: 1;
   }
+
+  .moveable {
+    cursor: pointer;
+  }
 </style>
 
 <div
@@ -82,7 +86,7 @@
   on:mouseenter={handleHoverOn}
   on:mouseleave={handleHoverOff}
   data-location={square.location}
-  class={`square ${square.color} ${square.piece && square.piece.isActive && 'is-active'}`}
+  class={`square ${square.color} ${square.piece && square.piece.isActive && 'is-active'} ${square.piece && square.piece.availableMoves.length > 0 && player === square.piece.color ? 'moveable' : ''}`}
   style={square.piece && `background-image: url(${getBackgroundImage(square.piece)})`}>
   <div class="location">{square.location}</div>
 </div>
