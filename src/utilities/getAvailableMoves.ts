@@ -118,7 +118,11 @@ const getAvailableMoves = (
       ...square,
       piece: {
         ...square.piece,
-        availableMoves: getAvailableMovesForPiece(square, board, player),
+        availableMoves: getAvailableMovesForPiece(
+          square,
+          board,
+          square.piece.color
+        ),
       },
     }
   })

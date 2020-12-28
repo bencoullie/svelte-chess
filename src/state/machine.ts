@@ -1,6 +1,7 @@
 import { assign, Machine } from 'xstate'
 import { activatePiece } from './actions/activatePiece'
 import { castle } from './actions/castle'
+import { lookForCheckmate } from './actions/lookForCheckmate'
 import { movePiece } from './actions/movePiece'
 import { recalculateAvailableMoves } from './actions/recalculateAvailableMoves'
 import { swapPlayer } from './actions/swapPlayer'
@@ -8,11 +9,14 @@ import { canCastle } from './guards/canCastle'
 import { isLegalMove } from './guards/isLegalMove'
 import { createChessBoard } from './services/createChessBoard'
 
+// TODO: store context state in local so it can be retrieved on page load
+// TODO: Implement reset button which resets board + deletes local state
 const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
   {
     id: 'Machine',
     initial: 'setup',
     context: {
+      isCheckmate: false,
       board: [],
       player: 'white',
     },
@@ -37,7 +41,12 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
           MOVE: {
             target: 'play',
             cond: 'isLegalMove',
-            actions: ['movePiece', 'swapPlayer', 'recalculateAvailableMoves'],
+            actions: [
+              'movePiece',
+              'swapPlayer',
+              'recalculateAvailableMoves',
+              'lookForCheckmate',
+            ],
           },
           CASTLE: {
             target: 'play',
@@ -65,6 +74,7 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
       movePiece: assign(movePiece),
       castle: assign(castle),
       recalculateAvailableMoves: assign(recalculateAvailableMoves),
+      lookForCheckmate: assign(lookForCheckmate),
     },
     services: {
       createChessBoard,

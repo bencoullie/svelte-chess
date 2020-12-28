@@ -10,6 +10,7 @@ const movePiece = (context: Chess.Context, event: Chess.Event) => {
     // Grab a bunch of pointers in a single loop (more performant than multiple finds)
     context.board.forEach((square) => {
       // Get the currently active square
+      // TODO: refactor all these move actions to take an active square rather than having to find it every time
       if (square.piece?.isActive) currentlyActiveSquare = square
 
       // Get move destination square

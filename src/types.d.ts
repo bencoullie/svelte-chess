@@ -65,6 +65,7 @@ declare global {
     interface Context {
       board: Chess.Board
       player: Chess.Color
+      isCheckmate: boolean
     }
   }
 }
