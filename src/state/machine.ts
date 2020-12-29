@@ -62,7 +62,10 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
       },
       gameOver: {
         on: {
-          PLAY_AGAIN: 'setup',
+          PLAY_AGAIN: {
+            target: 'setup',
+            actions: ['resetContext'],
+          },
         },
       },
     },
@@ -75,6 +78,9 @@ const machine = Machine<Chess.Context, Chess.StateSchema, Chess.Event>(
       castle: assign(castle),
       recalculateAvailableMoves: assign(recalculateAvailableMoves),
       lookForCheckmate: assign(lookForCheckmate),
+      resetContext: assign((context: Chess.Context, event: Chess.Event) => {
+        return { isCheckmate: false, player: 'white' }
+      }),
     },
     services: {
       createChessBoard,

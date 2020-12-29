@@ -1,5 +1,6 @@
 <script lang="ts">
   import ChessBoard from "./chessBoard/chessBoard.svelte";
+  import Modal from "svelte-simple-modal";
   import "toastify-js/src/toastify.css";
 </script>
 
@@ -35,7 +36,9 @@
   }
 </style>
 
-<main>
-  <h1>Svelte <span>Chess</span></h1>
-  <ChessBoard />
-</main>
+<Modal>
+  <main>
+    <h1>Svelte <span>Chess</span></h1>
+    <ChessBoard />
+  </main>
+</Modal>
