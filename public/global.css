@@ -6,3 +6,9 @@
   box-shadow: 0 0px 8px 0px #bbb;
   color: #fff;
 }
+
+/* Additional modal styles */
+.content {
+  border: 4px solid #fcc9b9 !important;
+  border-radius: 8px !important;
+}
